@@ -8,14 +8,12 @@ def call(body) {
     body()
     def FAILED_ON_RESOURCE_LOCK = true
 
-
     pipeline {
         agent any
 
         parameters{
             string(name: 'generate_vulnerability_report', defaultValue: 'No', description: '')
         }
-
 
         environment {
                 java_v = 'jdk11.0.15-linux_x64'
@@ -46,11 +44,10 @@ def call(body) {
                     beforeOptions true
                     expression { utils.is_resource_available("${pipelineParams.component}-${env.db_var}") }
                 }
-                options {
-                	lock(resource: "${pipelineParams.component}-${env.db_var}")
-                 }
                 steps {
-                    echo "Hello World"
+                    lock("${pipelineParams.component}-${env.db_var}" as String) {
+                             echo "Hello World"
+                    }
                 }
            }
         }

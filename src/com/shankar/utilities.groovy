@@ -1,13 +1,12 @@
-import org.jenkins.plugins.lockableresources.LockableResourcesManager as manager
+package com.shankar
+import org.jenkins.plugins.lockableresources.*
 
-public class utilities implements hudson.model.Action,java.io.Serializable {
-
-def jenkinsResources = manager.get().resources
+// def jenkinsResources = org.jenkins.plugins.lockableresources.LockableResourcesManager.get().resources
 
 def is_resource_available(String resource_name) {
-    sh "echo $resource_name"
-    return manager.jenkinsResources.findAll {
-      it.name == resource_name && it.locked && it.isQueued()
+    sh """ echo "Resource is: $resource_name" """
+    return  org.jenkins.plugins.lockableresources.LockableResourcesManager.get().getResources().findAll {
+        it.name == resource_name && it.locked && it.isQueued()
     }.size() == 0
-    }
 }
+
